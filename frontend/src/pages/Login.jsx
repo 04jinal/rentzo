@@ -1,6 +1,9 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function Login() {
     const navigate = useNavigate();
@@ -13,7 +16,7 @@ function Login() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/api/auth/login",
+                `${API_URL}/api/auth/login`,
                 {
                     method: "POST",
                     headers: {
@@ -29,7 +32,7 @@ function Login() {
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.message);
+                alert(data.message || "Login failed");
                 return;
             }
 
@@ -37,10 +40,9 @@ function Login() {
             localStorage.setItem("user", JSON.stringify(data.user));
 
             alert("Login successful 🎉");
-
             navigate("/");
         } catch (error) {
-            console.error(error);
+            console.error("Login Error:", error);
             alert("Server se connect nahi ho pa raha.");
         }
     };
@@ -49,7 +51,6 @@ function Login() {
         <div className="auth-page">
             <div className="auth-container">
 
-                {/* Left Side */}
                 <div className="auth-brand">
                     <div className="auth-brand-content">
                         <img
@@ -78,11 +79,8 @@ function Login() {
                     </div>
                 </div>
 
-                {/* Right Side */}
                 <div className="auth-form-wrapper">
                     <form className="auth-form" onSubmit={handleLogin}>
-
-
                         <h1>Welcome Back</h1>
 
                         <p className="auth-subtitle">
@@ -119,7 +117,6 @@ function Login() {
                                 Create Account
                             </Link>
                         </p>
-
                     </form>
                 </div>
 
